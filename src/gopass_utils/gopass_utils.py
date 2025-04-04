@@ -59,7 +59,7 @@ class Gopass:
 
         try:
             result = subprocess.run(
-                ["gopass", "show", "-o", full_path],
+                ["gopass", "show", full_path],
                 capture_output=True,
                 text=True,
                 check=True

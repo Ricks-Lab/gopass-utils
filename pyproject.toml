@@ -1,11 +1,14 @@
+[build-system]
+requires = ["setuptools>=68.0.0", "wheel>=0.40.0", "build>=1.0.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "gopass-utils"
-version = "0.1.0"
+name = "gopass_utils"
+version = "0.2.0"
 description = "Reusable Gopass interface for Python Projects"
 authors = [{ name = "Rick", email = "ricks.homelab@gmail.com" }]
 readme = "README.md"
-license = "GPL-3.0-or-later"
-license-files = ["LICENSE"]
+license = {text = "GPL-3.0-or-later"}
 keywords = ["security", "gpg", "vault", "password", "gopass"]
 requires-python = ">=3.8"
 classifiers = [
@@ -25,17 +28,13 @@ classifiers = [
     "Topic :: Utilities",
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
-dependencies = []
 
-[build-system]
-requires = ["setuptools>=61", "wheel", "tomli", "build"]
-build-backend = "setuptools.build_meta"
+[tool.setuptools]
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-#packages = ["gopass_utils"]
-#package-dir = { "" = "src" }
-#include-package-data = true
+include = ["gopass_utils*"]
 
 [project.urls]
 homepage = "https://github.com/Ricks-Lab/gopass-utils"
