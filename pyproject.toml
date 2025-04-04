@@ -1,18 +1,44 @@
 [project]
-name = "rickslab-gopass-utils"
+name = "gopass-utils"
 version = "0.1.0"
-description = "Reusable Gopass interface for Python projects"
-authors = [{ name = "Rick", email = "rick@example.com" }]
+description = "Reusable Gopass interface for Python Projects"
+authors = [{ name = "Rick", email = "ricks.homelab@gmail.com" }]
 readme = "README.md"
 license = "GPL-3.0-or-later"
 license-files = ["LICENSE"]
+keywords = ["security", "gpg", "vault", "password", "gopass"]
 requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: English",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Utilities",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
 dependencies = []
 
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=61", "wheel", "tomli", "build"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-package-dir = { "" = "src" }
-packages = ["gopass_utils"]
+[tool.setuptools.packages.find]
+where = ["src"]
+#packages = ["gopass_utils"]
+#package-dir = { "" = "src" }
+#include-package-data = true
+
+[project.urls]
+homepage = "https://github.com/Ricks-Lab/gopass-utils"
+documentation = "https://github.com/Ricks-Lab/gopass-utils"
+source = "https://github.com/Ricks-Lab/gopass-utils"
+bug-tracker = "https://github.com/Ricks-Lab/gopass-utils/issues"
