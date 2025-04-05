@@ -2,7 +2,8 @@
 
 A set of utilities to manage secrets with [Gopass](https://www.gopass.pw/) and extract them as needed.
 
-This module is designed for use in Python projects that require secure, runtime access to secrets such as database passwords, API tokens, or configuration blobs.
+This module is designed for use in Python projects that require secure, runtime access to
+secrets such as database passwords, API tokens, or configuration blobs.
 
 ## Features
 
@@ -14,8 +15,19 @@ This module is designed for use in Python projects that require secure, runtime 
 
 ## Installation
 
-In editable mode during development:
-
 ```bash
-pip install -e .
+wget https://github.com/gopasspw/gopass/releases/download/v1.15.15/gopass_1.15.15_linux_amd64.deb
+sudo dpkg -i gopass_1.15.15_linux_amd64.deb
+```
 
+## New in this Release - v0.3.0
+* Update to use v1.15.15 of gopass.
+* Change back to using -o option of gopass.
+
+## History
+
+### New in Previous Release - v0.2.0
+* Remove `-o` option in call to gopass.
+
+### New in Previous Release - v0.1.0
+* Initial release.
