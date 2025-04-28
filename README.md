@@ -20,11 +20,14 @@ wget https://github.com/gopasspw/gopass/releases/download/v1.15.15/gopass_1.15.1
 sudo dpkg -i gopass_1.15.15_linux_amd64.deb
 ```
 
-## New in this Release - v0.3.0
-* Update to use v1.15.15 of gopass.
-* Change back to using -o option of gopass.
+## New in this Release - v0.4.0
+* Use new packaging build env.
 
 ## History
+
+## New in this Previos Release - v0.3.0
+* Update to use v1.15.15 of gopass.
+* Change back to using -o option of gopass.
 
 ### New in Previous Release - v0.2.0
 * Remove `-o` option in call to gopass.

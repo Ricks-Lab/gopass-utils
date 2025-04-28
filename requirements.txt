@@ -1,4 +1,4 @@
-build>=1.2.2
-setuptools
-wheel
+#build>=1.2.2
+#setuptools
+#wheel
 tomli>=2.2.1

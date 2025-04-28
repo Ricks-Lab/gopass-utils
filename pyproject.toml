@@ -1,10 +1,12 @@
 [project]
 name = "gopass_utils"
-version = "0.3.0"
+version = "0.4.0"
 description = "Reusable Gopass interface for Python Projects"
 authors = [{ name = "Rick", email = "ricks.homelab@gmail.com" }]
 readme = "README.md"
-license = {text = "GPL-3.0-or-later"}
+#license = {text = "GPL-3.0-or-later"}
+license = "LicenseRef-Proprietary"
+license-files = ["LICENSE"]
 keywords = ["security", "gpg", "vault", "password", "gopass"]
 requires-python = ">=3.8"
 classifiers = [
