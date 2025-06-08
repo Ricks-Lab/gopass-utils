@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from typing import Optional, Tuple
 import argparse
+import pprint
 import subprocess
 from pathlib import Path
 import pexpect
@@ -49,7 +49,7 @@ def load_config_toml(config_path: str = CONFIG_FILE) -> dict:
 
 # Key name → Gopass path → Expected comment (e.g., hostname or system)
 SSH_KEYS: dict = load_config_toml()
-print(SSH_KEYS)
+LOGGER.debug("Loaded: %s", pprint.pprint(SSH_KEYS))
 
 def is_key_loaded(key_path: Path) -> bool:
     """ Check if a key is loaded.
