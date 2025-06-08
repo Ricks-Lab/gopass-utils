@@ -1,15 +1,54 @@
 #!/usr/bin/env python3
+
+from typing import Optional, Tuple
 import argparse
 import subprocess
 from pathlib import Path
-import sys
 import pexpect
 import socket
-
-def get_hostname() -> str:
-    return socket.gethostname().lower()
+import tomli
 
 SSH_DIR = Path.home() / ".ssh"
+CONFIG_FILE = SSH_DIR / "ssh_unlock_config.toml"
+
+def get_hostname() -> str:
+    """ Get the hostname for system.
+
+    :return: Hostname as a string
+    """
+    return socket.gethostname().lower()
+
+
+def load_config_toml(config_path: str = CONFIG_FILE) -> Tuple[Optional[dict],...]:
+    """ Read the database configuration file and return it as a dictionary.
+
+    :param config_path: Full path to the configuration file as string.
+    :return: Configuration dictionary.
+    """
+    hostname = get_hostname()
+    try_config_paths = (config_path, ) if config_path else (CONFIG_FILE, )
+    for try_config_path in try_config_paths:
+        try:
+            with open(try_config_path, mode="rb") as f:
+                config = tomli.load(f)
+            sys_config = config.get("systems", {})
+            LOGGER.debug("Loaded %s: %s", try_config_path, sys_config)
+            LOGGER.info("Role of %s is %s", hostname, sys_config[hostname])
+            database = "test_database" if sys_config[hostname] == "development" else "database"
+            db_config = config.get(database, {})
+            LOGGER.info("Loaded %s", try_config_path)
+            LOGGER.info("DB Config:\n    %s", db_config)
+            return db_config, sys_config
+        except FileNotFoundError:
+            LOGGER.info("FileNotFoundError: %s", try_config_path)
+            continue
+        except KeyError:
+            LOGGER.info("KeyError: %s missing [%s] entry", try_config_path, database)
+            continue
+        except Exception as e:
+            raise RuntimeError("Unexpected Error loading DB config") from e
+    raise RuntimeError("Failed to load DB config")
+
 
 # Key name → Gopass path → Expected comment (e.g., hostname or system)
 SSH_KEYS = {
@@ -22,6 +61,11 @@ SSH_KEYS = {
 }
 
 def is_key_loaded(key_path: Path) -> bool:
+    """ Check if a key is loaded.
+
+    :param key_path: path to the key file.
+    :return: True if the key is loaded, False otherwise.
+    """
     try:
         # Get fingerprint of this key
         result = subprocess.run(
@@ -42,6 +86,11 @@ def is_key_loaded(key_path: Path) -> bool:
         return False
 
 def get_key_comment(key_path: Path) -> str:
+    """ Get the comment for a key.
+
+    :param key_path: path to the key file.
+    :return: comment as a string
+    """
     try:
         result = subprocess.run(
             ["ssh-keygen", "-lf", str(key_path)],
@@ -54,7 +103,13 @@ def get_key_comment(key_path: Path) -> str:
     except Exception:
         return "unknown"
 
-def unlock_key(key_name: str, gopass_path: str, expected_host: str):
+def unlock_key(key_name: str, gopass_path: str, expected_host: str) -> None:
+    """ Unlock the key defined by `key_name` and gopass path.
+
+    :param key_name: Name of the key file to unlock.
+    :param gopass_path: The gopass path of the key file to unlock.
+    :param expected_host:  The host name of the key file to unlock.
+    """
     key_path = SSH_DIR / key_name
     if not key_path.exists():
         print(f"❌ Key not found: {key_path}")
