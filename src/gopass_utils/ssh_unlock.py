@@ -6,10 +6,13 @@ import subprocess
 from pathlib import Path
 import pexpect
 import socket
-import tomli
+import tomllib
+
+from gopass_utils import gu_logger
 
 SSH_DIR = Path.home() / ".ssh"
 CONFIG_FILE = SSH_DIR / "ssh_unlock_config.toml"
+LOGGER = gu_logger.configure_logger(__name__, stream=True)
 
 def get_hostname() -> str:
     """ Get the hostname for system.
@@ -19,7 +22,7 @@ def get_hostname() -> str:
     return socket.gethostname().lower()
 
 
-def load_config_toml(config_path: str = CONFIG_FILE) -> Tuple[Optional[dict],...]:
+def load_config_toml(config_path: str = CONFIG_FILE) -> dict:
     """ Read the database configuration file and return it as a dictionary.
 
     :param config_path: Full path to the configuration file as string.
@@ -30,35 +33,23 @@ def load_config_toml(config_path: str = CONFIG_FILE) -> Tuple[Optional[dict],...
     for try_config_path in try_config_paths:
         try:
             with open(try_config_path, mode="rb") as f:
-                config = tomli.load(f)
-            sys_config = config.get("systems", {})
-            LOGGER.debug("Loaded %s: %s", try_config_path, sys_config)
-            LOGGER.info("Role of %s is %s", hostname, sys_config[hostname])
-            database = "test_database" if sys_config[hostname] == "development" else "database"
-            db_config = config.get(database, {})
-            LOGGER.info("Loaded %s", try_config_path)
-            LOGGER.info("DB Config:\n    %s", db_config)
-            return db_config, sys_config
+                config = tomllib.load(f)
+            LOGGER.debug("Loaded %s: %s", try_config_path, config)
+            return config["ssh_keys"]
         except FileNotFoundError:
             LOGGER.info("FileNotFoundError: %s", try_config_path)
             continue
         except KeyError:
-            LOGGER.info("KeyError: %s missing [%s] entry", try_config_path, database)
+            LOGGER.info("KeyError: %s missing [%s] entry", try_config_path, "ssh_keys")
             continue
         except Exception as e:
-            raise RuntimeError("Unexpected Error loading DB config") from e
-    raise RuntimeError("Failed to load DB config")
+            raise RuntimeError("Unexpected Error loading SSH config") from e
+    raise RuntimeError("Failed to load SSH config")
 
 
 # Key name → Gopass path → Expected comment (e.g., hostname or system)
-SSH_KEYS = {
-    "rick_askone":     ("ssh/rick_askone", "askone"),
-    "rick_eos":        ("ssh/rick_eos", "eos"),
-    "rick_git_askone": ("ssh/rick_git_askone", "askone"),
-    "rick_git_eos":    ("ssh/rick_git_eos", "eos"),
-    "rick_git_nexon":  ("ssh/rick_git_nexon", "nexon"),
-    "rick_nexon":      ("ssh/rick_nexon", "nexon"),
-}
+SSH_KEYS: dict = load_config_toml()
+print(SSH_KEYS)
 
 def is_key_loaded(key_path: Path) -> bool:
     """ Check if a key is loaded.
@@ -161,14 +152,15 @@ def main():
     args = parser.parse_args()
 
     current_host = get_hostname()
+    LOGGER.info("Current host: %s", current_host)
 
     if args.keys:
         selected_keys = args.keys
     else:
         # Only keys matching current host
         selected_keys = [
-            key for key, (_, expected_host) in SSH_KEYS.items()
-            if expected_host in current_host
+            key for key, meta in SSH_KEYS.items()
+            if meta["host"] in current_host
         ]
 
     if not selected_keys:
@@ -176,8 +168,11 @@ def main():
         return
 
     for key_name in selected_keys:
-        gopass_path, expected_host = SSH_KEYS[key_name]
+        key_data = SSH_KEYS[key_name]
+        gopass_path = key_data["path"]
+        expected_host = key_data["host"]
         unlock_key(key_name, gopass_path, expected_host)
+
 
 if __name__ == "__main__":
     main()

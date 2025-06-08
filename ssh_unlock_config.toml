@@ -1,0 +1,26 @@
+[ssh_keys]
+
+[ssh_keys.rick_askone]
+path = "ssh/rick_askone"
+host = "askone"
+
+[ssh_keys.rick_eos]
+path = "ssh/rick_eos"
+host = "eos"
+
+[ssh_keys.rick_git_askone]
+path = "ssh/rick_git_askone"
+host = "askone"
+
+[ssh_keys.rick_git_eos]
+path = "ssh/rick_git_eos"
+host = "eos"
+
+[ssh_keys.rick_git_nexon]
+path = "ssh/rick_git_nexon"
+host = "nexon"
+
+[ssh_keys.rick_nexon]
+path = "ssh/rick_nexon"
+host = "nexon"
+
