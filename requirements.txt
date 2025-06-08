@@ -2,3 +2,4 @@
 #setuptools
 #wheel
 tomli>=2.2.1
+pexpect
