@@ -1,6 +1,6 @@
 [project]
 name = "gopass_utils"
-version = "0.4.0"
+version = "0.5.0"
 description = "Reusable Gopass interface for Python Projects"
 authors = [{ name = "Rick", email = "ricks.homelab@gmail.com" }]
 readme = "README.md"
@@ -26,8 +26,19 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 
+dependencies = [
+    "pexpect>=4.9.0"
+]
+
 [build-system]
-requires = ["setuptools>=68.0.0", "wheel>=0.40.0", "build>=1.0.0"]
+requires = [
+    "setuptools>=68.0.0",
+    "wheel>=0.40.0",
+    "build>=1.0.0",
+    "twine>=6.1.0",
+    "validate-pyproject>=0.24.1",
+    "check-manifest>=0.50"
+]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]

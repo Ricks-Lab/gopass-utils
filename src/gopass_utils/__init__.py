@@ -6,5 +6,5 @@ __docformat__ = 'reStructuredText'
 # pylint: disable=no-member
 
 __package_name__ = "rickslab_gopass_utils"
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 __name__ = "gopass_utils"

@@ -8,11 +8,15 @@ PYTHON = python3
 .PHONY: clean build check upload
 
 clean:
-	rm -rf dist build *.egg-info
+	rm -rf dist build *.egg-info src/gopass_utils/*.egg.info
+
+tree:
+	@echo "$(GREEN)Displaying project tree...$(NC)"
+	tree --filelimit=25 -a -I "*env*|__pycache*|safe|.py*|.idea|.git|.coverage" --dirsfirst
 
 check:
 	check-manifest
-	validate-pyproject
+	validate-pyproject pyproject.toml
 
 build: clean check
 	python -m build
@@ -29,6 +33,7 @@ all: clean build validate
 help:
 	@echo "Usage:"
 	@echo "  make clean      # Clean all build artifacts"
+	@echo "  make tree       # Show project tree"
 	@echo "  make check      # Check manifest and validate pyproject"
 	@echo "  make build      # Build PyPI artifacts (sdist + wheel)"
 	@echo "  make validate   # Validate PyPI files"
