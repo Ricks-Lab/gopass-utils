@@ -1,0 +1,39 @@
+# Include project-level files
+include README.md
+include LICENSE
+include requirements.txt
+include pyproject.toml
+include db_config.toml
+include sl-services.sh
+include ssh_unlock_config.toml
+
+
+# Include man pages
+recursive-include man *.1
+
+# Include all source files
+recursive-include src/gopass-utils *
+
+# GitHooks
+recursive-include .githooks *
+
+# Exclude build files
+recursive-exclude debian *
+exclude Makefile
+exclude tests/*
+
+
+# Exclude unwanted
+global-exclude python3*
+global-exclude *__pycache__*
+global-exclude __pycache__/*
+global-exclude *.pyc
+global-exclude .DS_Store
+global-exclude *~
+prune .venv
+prune env
+prune .env
+prune .coverage
+prune src/__pycache__
+prune src/gopass_utils/__pycache__
+
