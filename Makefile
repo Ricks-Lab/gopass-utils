@@ -8,7 +8,8 @@ PYTHON = python3
 .PHONY: clean build check upload
 
 clean:
-	rm -rf dist build *.egg-info src/gopass_utils/*.egg.info
+	rm -rf dist build *.egg-info
+	rm -rf src/gopass_utils.egg-info
 
 tree:
 	@echo "$(GREEN)Displaying project tree...$(NC)"
